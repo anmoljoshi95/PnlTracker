@@ -68,7 +68,7 @@ app/
 ├── models/
 │   ├── trade.py
 │   └── enums.py
-├── serices/
+├── services/
 │   └── portfolio_manager.py # Business logic
 │
 tests/

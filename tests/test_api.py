@@ -136,3 +136,46 @@ def test_position_closed():
 
     response = client.get("/portfolio")
     assert response.status_code == 404  
+
+
+
+#Adding negative test cases to show endpoints are working properly
+def test_add_trade_negative_price():
+    response = client.post("/trades", json={
+        "id": 100,
+        "symbol": "BTC",
+        "side": "buy",
+        "price": -100,
+        "quantity": 1,
+        "timestamp": 1700000000
+    })
+
+    assert response.status_code == 422
+    assert "Price must be greater than 0" in response.text
+
+def test_add_trade_zero_quantity():
+    response = client.post("/trades", json={
+        "id": 100,
+        "symbol": "BTC",
+        "side": "buy",
+        "price": 100,
+        "quantity": 0,
+        "timestamp": 1700000000
+    })
+
+    assert response.status_code == 422
+    assert "Quantity must be greater than 0" in response.text
+
+
+def test_add_trade_invalid_side():
+    response = client.post("/trades", json={
+        "id": 100,
+        "symbol": "BTC",
+        "side": "***",
+        "price": -100,
+        "quantity": 1,
+        "timestamp": 1700000000
+    })
+
+    assert response.status_code == 422
+    assert "Side should be either 'buy' or 'sell'" in response.text
